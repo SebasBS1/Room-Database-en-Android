@@ -102,6 +102,9 @@ fun TasksScreen(
                 onSearchClicked = {
                     viewModel.executeSearch()
                 },
+                onSortOptionSelected = { option ->
+                    viewModel.onSortOptionChanged(option)
+                },
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 // ----- Lista de tareas -----

@@ -12,4 +12,10 @@
 
     <string name="search_placeholder">Buscar por título</string>
     <string name="search_button_desc">Buscar</string>
+
+    <string name="filter">Filter</string>
+    <string name="newest">RECENT</string>
+    <string name="older">OLDER</string>
+    <string name="az">AZ</string>
+    <string name="za">ZA</string>
 </resources>

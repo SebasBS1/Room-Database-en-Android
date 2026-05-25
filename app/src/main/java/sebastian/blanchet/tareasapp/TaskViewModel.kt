@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -28,15 +29,33 @@ class TaskViewModel(
     // Texto con el que se esta filtrando efectivamente.
 // Solo cambia cuando el usuario pulsa el boton de buscar.
     private val _activeQuery = MutableStateFlow("")
+    private val _sortOption = MutableStateFlow(Option.NEWEST)
 
     // Exponemos la lista de tareas como StateFlow.
 // stateIn convierte el Flow del DAO en un StateFlow
 // que Compose puede observar fácilmente.
     @OptIn(ExperimentalCoroutinesApi::class)
-    val tasks: StateFlow<List<TaskEntity>> = _activeQuery
-        .flatMapLatest { query ->
-            dao.searchTasks(query)
+    val tasks: StateFlow<List<TaskEntity>> =
+    combine(_activeQuery, _sortOption) {
+        query,
+        sortOption ->
+
+        query to sortOption
+    }
+    .flatMapLatest {
+        (query, sortOption) ->
+
+        when (sortOption) {
+            Option.NEWEST ->
+                dao.searchTasks(query)
+            Option.OLDEST ->
+                dao.searchOlder(query)
+            Option.AZ ->
+                dao.searchAZ(query)
+            Option.ZA ->
+                dao.searchZA(query)
         }
+    }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -72,6 +91,12 @@ class TaskViewModel(
         _activeQuery.value = _searchInput.value.trim()
     }
 
+    fun onSortOptionChanged(
+        sortOption: Option
+    ) {
+        _sortOption.value = sortOption
+    }
+
     // ----- Factory -----
 // El companion object guarda una Factory que sabe
 // como construir TaskViewModel con sus parámetros.
@@ -86,4 +111,11 @@ class TaskViewModel(
             }
         }
     }
+}
+
+enum class Option {
+    NEWEST,
+    OLDEST,
+    AZ,
+    ZA
 }

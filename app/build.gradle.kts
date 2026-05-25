@@ -60,7 +60,8 @@ dependencies {
     // Pruebas instrumentadas del DAO
     androidTestImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.room.testing)
-
+    //iconos bonitos
+    implementation(libs.material.icons.extended)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

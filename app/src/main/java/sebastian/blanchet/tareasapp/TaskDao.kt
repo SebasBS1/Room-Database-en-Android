@@ -31,4 +31,25 @@ interface TaskDao {
     ORDER BY creado_en DESC
     """)
     fun searchTasks(query: String): Flow<List<TaskEntity>>
+
+    @Query("""
+        SELECT * FROM tasks
+        WHERE titulo LIKE '%' || :query || '%'
+        ORDER BY creado_en ASC
+    """)
+    fun searchOlder(query: String): Flow<List<TaskEntity>>
+
+    @Query("""
+        SELECT * FROM tasks
+        WHERE titulo LIKE '%' || :query || '%'
+        ORDER BY titulo ASC
+    """)
+    fun searchAZ(query: String): Flow<List<TaskEntity>>
+
+    @Query("""
+        SELECT * FROM tasks
+        WHERE titulo LIKE '%' || :query || '%'
+        ORDER BY titulo DESC
+    """)
+    fun searchZA(query: String): Flow<List<TaskEntity>>
 }
