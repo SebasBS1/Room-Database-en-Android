@@ -39,6 +39,8 @@ fun TasksScreen(
 // collectAsStateWithLifecycle deja de escuchar
 // cuando la pantalla no está visible.
     val tasks by viewModel.tasks.collectAsStateWithLifecycle()
+    val searchInput by viewModel.searchInput
+        .collectAsStateWithLifecycle()
 // Estado local: texto del campo de nueva tarea.
     var nuevaTareaTexto by remember { mutableStateOf("") }
     var tareaBorrar by remember {mutableStateOf<TaskEntity?>(null)}
@@ -90,6 +92,17 @@ fun TasksScreen(
                 text = stringResource(R.string.app_title),
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(vertical = 16.dp)
+            )
+            // ----- Barra de busqueda (NUEVO) -----
+            SearchBar(
+                searchInput = searchInput,
+                onSearchInputChanged = { texto ->
+                    viewModel.onSearchInputChanged(texto)
+                },
+                onSearchClicked = {
+                    viewModel.executeSearch()
+                },
+                modifier = Modifier.padding(bottom = 8.dp)
             )
 // ----- Lista de tareas -----
             Box(modifier = Modifier.weight(1f)) {

@@ -9,4 +9,7 @@
     <string name="delete_action_conf">Estas seguro?</string>
     <string name="eliminar">Eliminar</string>
     <string name="cancelar">Cancelar</string>
+
+    <string name="search_placeholder">Buscar por título</string>
+    <string name="search_button_desc">Buscar</string>
 </resources>
